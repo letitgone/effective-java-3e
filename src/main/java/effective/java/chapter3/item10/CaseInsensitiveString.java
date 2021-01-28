@@ -12,36 +12,45 @@ public class CaseInsensitiveString {
 
     private final String s;
 
-    public CaseInsensitiveString(String s) {
+    private final String name;
+
+    public CaseInsensitiveString(String s, String name) {
         this.s = Objects.requireNonNull(s);
+        this.name = Objects.requireNonNull(name);
     }
 
-    // Broken - violates symmetry!
-    //    @Override public boolean equals(Object o) {
-    //        if (o instanceof CaseInsensitiveString)
-    //            return s.equalsIgnoreCase(
-    //                    ((CaseInsensitiveString) o).s);
-    //        if (o instanceof String)  // One-way interoperability!
-    //            return s.equalsIgnoreCase((String) o);
-    //        return false;
-    //    }
+    /**
+     * 违反对称性
+     *
+     * @param o
+     * @return
+     */
+//    @Override
+//    public boolean equals(Object o) {
+//        if (o instanceof CaseInsensitiveString) {
+//            return s.equalsIgnoreCase(((CaseInsensitiveString) o).s);
+//        }
+//        if (o instanceof String) {
+//            return s.equalsIgnoreCase((String) o);
+//        }
+//        return false;
+//    }
 
-    // Demonstration of the problem (Page 40)
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof CaseInsensitiveString && ((CaseInsensitiveString) o).s
+                .equalsIgnoreCase(s);
+    }
+
     public static void main(String[] args) {
-        CaseInsensitiveString cis = new CaseInsensitiveString("Polish");
-        String s = "polish";
+        CaseInsensitiveString cis = new CaseInsensitiveString("Polish", "test");
+        CaseInsensitiveString cis1 = new CaseInsensitiveString("Poldish", "123");
+        String s = "Polish";
         System.out.println(cis.equals(s));
 
         List<CaseInsensitiveString> list = new ArrayList<>();
         list.add(cis);
 
-        System.out.println(list.contains(s));
-    }
-
-    // Fixed equals method (Page 40)
-    @Override
-    public boolean equals(Object o) {
-        return o instanceof CaseInsensitiveString && ((CaseInsensitiveString) o).s
-                .equalsIgnoreCase(s);
+        System.out.println(list.contains(new TestString(s)));
     }
 }
