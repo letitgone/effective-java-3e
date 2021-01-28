@@ -1,4 +1,4 @@
-package effective.java.chapter2.item.builder;
+package effective.java.chapter2.item2.builder;
 
 /**
  * @Author ZhangGJ
